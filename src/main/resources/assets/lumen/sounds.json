@@ -1,0 +1,9 @@
+{
+  "breeze": {
+    "category": "ambient",
+    "subtitle": "Breeze",
+    "sounds": [
+      { "name": "lumen:breeze", "stream": false }
+    ]
+  }
+}

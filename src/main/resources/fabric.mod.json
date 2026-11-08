@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "lumen",
+  "version": "${version}",
+  "name": "Lumen",
+  "description": "Visual revamp: sunrise/sunset colors, mist, haze, bloom, water splashes, waterfalls, weather, underwater rays, held-item light and more. Purely cosmetic. On a server it only checks that players have it installed.",
+  "authors": [
+    "you"
+  ],
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.lumen.Lumen"
+    ],
+    "client": [
+      "net.lumen.LumenClient"
+    ]
+  },
+  "mixins": [
+    "lumen.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.11",
+    "java": ">=21"
+  }
+}

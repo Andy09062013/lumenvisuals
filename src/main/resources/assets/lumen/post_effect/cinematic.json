@@ -1,0 +1,311 @@
+{
+  "targets": {
+    "bloom_a": {},
+    "bloom_b": {},
+    "swap": {},
+    "light_a": {},
+    "light_b": {}
+  },
+  "passes": [
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "lumen:post/bright",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "output": "bloom_a",
+      "uniforms": {
+        "BrightConfig": [
+          {
+            "name": "Threshold",
+            "type": "float",
+            "value": 0.86
+          },
+          {
+            "name": "Knee",
+            "type": "float",
+            "value": 0.2
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/box_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "bloom_a",
+          "bilinear": true
+        }
+      ],
+      "output": "bloom_b",
+      "uniforms": {
+        "BlurConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "name": "Radius",
+            "type": "float",
+            "value": 10.0
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/box_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "bloom_b",
+          "bilinear": true
+        }
+      ],
+      "output": "bloom_a",
+      "uniforms": {
+        "BlurConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "name": "Radius",
+            "type": "float",
+            "value": 10.0
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/box_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "bloom_a",
+          "bilinear": true
+        }
+      ],
+      "output": "bloom_b",
+      "uniforms": {
+        "BlurConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "name": "Radius",
+            "type": "float",
+            "value": 5.0
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/box_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "bloom_b",
+          "bilinear": true
+        }
+      ],
+      "output": "bloom_a",
+      "uniforms": {
+        "BlurConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "name": "Radius",
+            "type": "float",
+            "value": 5.0
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "lumen:post/lighting",
+      "inputs": [
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        },
+        {
+          "sampler_name": "Data",
+          "location": "lumen:data",
+          "width": 11,
+          "height": 1,
+          "bilinear": false
+        },
+        {
+          "sampler_name": "Shadow",
+          "location": "lumen:shadow",
+          "width": 2048,
+          "height": 2048,
+          "bilinear": false
+        }
+      ],
+      "output": "light_a"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "lumen:post/depth_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "light_a"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        },
+        {
+          "sampler_name": "Data",
+          "location": "lumen:data",
+          "width": 11,
+          "height": 1,
+          "bilinear": false
+        }
+      ],
+      "output": "light_b",
+      "uniforms": {
+        "LumenBlur": [
+          {
+            "name": "Dir",
+            "type": "vec2",
+            "value": [
+              1.0,
+              0.0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "lumen:post/depth_blur",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "light_b"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        },
+        {
+          "sampler_name": "Data",
+          "location": "lumen:data",
+          "width": 11,
+          "height": 1,
+          "bilinear": false
+        }
+      ],
+      "output": "light_a",
+      "uniforms": {
+        "LumenBlur": [
+          {
+            "name": "Dir",
+            "type": "vec2",
+            "value": [
+              0.0,
+              1.0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "lumen:post/atmosphere",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        },
+        {
+          "sampler_name": "Bloom",
+          "target": "bloom_a",
+          "bilinear": true
+        },
+        {
+          "sampler_name": "Data",
+          "location": "lumen:data",
+          "width": 11,
+          "height": 1,
+          "bilinear": false
+        },
+        {
+          "sampler_name": "Light",
+          "target": "light_a",
+          "bilinear": true
+        }
+      ],
+      "output": "swap"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap"
+        }
+      ],
+      "output": "minecraft:main",
+      "uniforms": {
+        "BlitConfig": [
+          {
+            "name": "ColorModulate",
+            "type": "vec4",
+            "value": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

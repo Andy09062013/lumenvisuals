@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.lumen.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "GameRendererAccessor",
+    "WorldRendererPostMixin",
+    "WorldRendererMixin",
+    "EntityRendererMixin",
+    "WorldRendererAccessor",
+    "SodiumShaderLoaderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
