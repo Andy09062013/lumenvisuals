@@ -11,8 +11,15 @@ import java.nio.file.Path;
 
 /** Saved to config/lumen-server.json on the server. */
 public final class ServerConfig {
+	public static final String DEFAULT_URL = "https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar";
+	/** Old default links that get upgraded automatically. */
+	private static final String[] OLD_URLS = {
+			"https://modrinth.com/mod/lumen",
+			"https://github.com/Andy09062013/lumenvisuals/releases/latest/download/lumen.jar"
+	};
+
 	public boolean requireClientMod = true;
-	public String downloadUrl = "https://github.com/Andy09062013/lumenvisuals/releases/latest/download/lumen.jar";
+	public String downloadUrl = DEFAULT_URL;
 	public String kickMessage = "This server requires the Lumen visual mod (client side, Fabric 1.21.11).";
 
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -25,6 +32,7 @@ public final class ServerConfig {
 				try (Reader r = Files.newBufferedReader(file)) {
 					ServerConfig read = GSON.fromJson(r, ServerConfig.class);
 					if (read != null) cfg = read;
+					for (String o : OLD_URLS) if (o.equals(cfg.downloadUrl)) cfg.downloadUrl = DEFAULT_URL;
 				}
 			}
 			Files.createDirectories(file.getParent());

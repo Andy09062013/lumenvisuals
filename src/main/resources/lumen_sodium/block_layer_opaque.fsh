@@ -97,7 +97,7 @@ void main() {
 
     // Lumen: sky colours on water + clearer water (no-op unless the "sky colors on water" pack is on)
     color.rgb = lumen_water(color, v_Color, v_LumenViewPos, u_FogColor);
-    color.a = lumen_water_alpha(color, v_Color);
+    color.a = lumen_water_alpha(color, v_Color, v_LumenViewPos);
 
     fragColor = _linearFog(color, v_FragDistance, u_FogColor, u_EnvironmentFog, u_RenderFog, fadeFactor);
 }

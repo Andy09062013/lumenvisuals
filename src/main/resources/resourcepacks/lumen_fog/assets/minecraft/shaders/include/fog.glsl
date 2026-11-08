@@ -29,8 +29,8 @@ float total_fog_value(float sphericalVertexDistance, float cylindricalVertexDist
 vec4 apply_fog(vec4 inColor, float sphericalVertexDistance, float cylindricalVertexDistance, float environmentalStart, float environmantalEnd, float renderDistanceStart, float renderDistanceEnd, vec4 fogColor) {
     // Lumen: clearer water - blue water fog reaches further
     if (fogColor.b > fogColor.r * 1.4 && fogColor.b > 0.15 && environmantalEnd < 120.0) {
-        environmentalStart *= 1.6;
-        environmantalEnd *= 1.7;
+        environmentalStart *= 1.35;
+        environmantalEnd *= 1.4;
     }
     float fogValue = total_fog_value(sphericalVertexDistance, cylindricalVertexDistance, environmentalStart, environmantalEnd, renderDistanceStart, renderDistanceEnd);
     return vec4(mix(inColor.rgb, fogColor.rgb, fogValue * fogColor.a), inColor.a);

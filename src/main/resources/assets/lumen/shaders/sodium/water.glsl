@@ -3,6 +3,6 @@ vec3 lumen_water(vec4 color, vec4 vertColor, vec3 viewPos, vec4 fogColor) {
     return color.rgb;
 }
 
-float lumen_water_alpha(vec4 color, vec4 vertColor) {
+float lumen_water_alpha(vec4 color, vec4 vertColor, vec3 viewPos) {
     return color.a;
 }
