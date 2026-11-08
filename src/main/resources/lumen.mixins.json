@@ -9,7 +9,9 @@
     "WorldRendererMixin",
     "EntityRendererMixin",
     "WorldRendererAccessor",
-    "SodiumShaderLoaderMixin"
+    "SodiumShaderLoaderMixin",
+    "BufferBuilderMixin",
+    "IndigoTerrainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -23,7 +23,9 @@ public final class SodiumShaders {
 				case "sodium:blocks/block_layer_opaque.fsh":
 					return read("/lumen_sodium/block_layer_opaque.fsh");
 				case "lumen:sodium/sway.glsl":
-					return read("/assets/lumen/shaders/sodium/sway.glsl");
+					return packOn("lumen_foliage")
+							? read("/resourcepacks/lumen_foliage/assets/lumen/shaders/sodium/sway.glsl")
+							: read("/assets/lumen/shaders/sodium/sway.glsl");
 				case "lumen:sodium/water.glsl":
 					return packOn("lumen_water")
 							? read("/resourcepacks/lumen_water/assets/lumen/shaders/sodium/water.glsl")

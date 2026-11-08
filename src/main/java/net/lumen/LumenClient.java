@@ -34,8 +34,8 @@ public class LumenClient implements ClientModInitializer {
 	public static final Env ENV = new Env();
 
 	/** Built-in resource packs for the terrain-shader effects (toggle in /lumen or Options > Resource Packs). */
-	public static final String[] PACKS = {"lumen_water", "lumen_lighting", "lumen_fog"};
-	public static final String[] PACK_NAMES = {"Sky colors on water", "Warm torchlight & blue moonlight", "Soft fog"};
+	public static final String[] PACKS = {"lumen_foliage", "lumen_water", "lumen_lighting", "lumen_fog"};
+	public static final String[] PACK_NAMES = {"Swaying grass & foliage", "Sky colors on water", "Warm torchlight & blue moonlight", "Soft fog"};
 
 	private static boolean openScreen;
 

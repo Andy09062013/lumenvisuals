@@ -5,6 +5,7 @@ Shader-like visuals for Minecraft 1.21.11 (Fabric). Purely cosmetic.
 **Download:** [lumen.jar (latest)](https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar) - put it in your mods folder with [Fabric API](https://modrinth.com/mod/fabric-api).
 
 ```
+LUMEN v0.5 - visual mod for Minecraft 1.21.11 (Fabric)
 
 BUILD: double click BUILD.bat. The jar ends up in the out folder.
 INSTALL: put the jar + Fabric API in your mods folder (client). Optionally on a server too.
@@ -34,6 +35,7 @@ AMBIENCE
 - Drifting dust in deserts/badlands and caves
 - Heat shimmer in hot dry biomes (optional, off on Low/Medium)
 - Snow gusts in cold biomes
+- Leaves, grass, crops and dead bushes lean gently downwind and spring back (shader pack)
 - Breezes every 1-2 minutes: soft leaf rustle, loud only when you're surrounded by trees (/lumen breeze plays one)
 
 WEATHER
@@ -54,8 +56,8 @@ LIGHT & LOOK (shaderpack style)
 - Warm color grading, gentle bloom, vignette
 
 SHADER PACKS (Options > Resource Packs, or in /lumen)
-Three built-in packs, all on by default:
-  Lumen: sky colors on water / warm torchlight & blue moonlight / soft fog
+Four built-in packs, all on by default:
+  Lumen: swaying grass & foliage / sky colors on water / warm torchlight & blue moonlight / soft fog
 
 SERVER
 If Lumen is on a dedicated server, players without it get disconnected with a message telling

@@ -18,6 +18,7 @@ public final class Compat {
 	/** Same for the built-in shader packs (index into LumenClient.PACKS). */
 	public static String packUnavailable(int pack) {
 		if (IrisCompat.shaderPackActive()) return "off: Iris shaderpack";
+		if (SODIUM && pack == 0) return "grass only with Sodium";
 		return null;
 	}
 
