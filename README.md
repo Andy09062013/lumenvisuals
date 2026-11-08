@@ -2,7 +2,7 @@
 
 Shader-like visuals for Minecraft 1.21.11 (Fabric). Purely cosmetic.
 
-**Download:** [lumen.jar (latest)](https://github.com/Andy09062013/lumenvisuals/releases/latest/download/lumen.jar) - put it in your mods folder with [Fabric API](https://modrinth.com/mod/fabric-api).
+**Download:** [lumen.jar (latest)](https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar) - put it in your mods folder with [Fabric API](https://modrinth.com/mod/fabric-api).
 
 ```
 
