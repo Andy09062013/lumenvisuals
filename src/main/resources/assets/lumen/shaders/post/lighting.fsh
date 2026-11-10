@@ -26,22 +26,44 @@ float linearDepth(float d, float far) {
     return (2.0 * NEAR * far) / (far + NEAR - z * (far - NEAR));
 }
 
-vec3 gFwd, gRight, gUp;
-float gTh, gAspect, gFar;
+// exact camera from the real render matrices (includes view bobbing, sprint FOV, hurt tilt...):
+// camera-relative world position = gE + ray(ndc) * linear depth, ray(ndc) = gC + gX * ndc.x + gY * ndc.y
+vec3 gE, gC, gX, gY, gFwd;
+mat3 gInv;
+float gFar;
+
+float sv(vec2 v, float r) { return (u16(v) * 2.0 - 1.0) * r; }
+
+void loadView() {
+    vec4 a = dataAt(12), b = dataAt(13), c = dataAt(14), d = dataAt(15), e = dataAt(16), f = dataAt(17);
+    gE = vec3(sv(a.rg, 2.0), sv(a.ba, 2.0), sv(b.rg, 2.0));
+    gC = vec3(sv(b.ba, 8.0), sv(c.rg, 8.0), sv(c.ba, 8.0));
+    gX = vec3(sv(d.rg, 8.0), sv(d.ba, 8.0), sv(e.rg, 8.0));
+    gY = vec3(sv(e.ba, 8.0), sv(f.rg, 8.0), sv(f.ba, 8.0));
+    gInv = inverse(mat3(gC, gX, gY));
+    gFwd = normalize(gC);
+}
 
 vec3 viewRay(vec2 tc) {
     vec2 n = tc * 2.0 - 1.0;
-    return gFwd + gRight * (n.x * gTh * gAspect) + gUp * (n.y * gTh);
+    return gC + gX * n.x + gY * n.y;
 }
 
+// camera-relative world position of the surface at this screen spot
 vec3 posAt(vec2 tc) {
-    return viewRay(tc) * linearDepth(texture(DepthSampler, tc).r, gFar);
+    return gE + viewRay(tc) * linearDepth(texture(DepthSampler, tc).r, gFar);
 }
 
+// camera-relative world position -> screen uv (z = linear depth)
 vec3 project(vec3 p) {
-    float z = dot(p, gFwd);
-    vec2 n = vec2(dot(p, gRight) / (z * gTh * gAspect), dot(p, gUp) / (z * gTh));
-    return vec3(n * 0.5 + 0.5, z);
+    vec3 s = gInv * (p - gE);
+    return vec3(s.yz / s.x * 0.5 + 0.5, s.x);
+}
+
+// direction -> screen uv (z > 0 when in front)
+vec3 projectDir(vec3 d) {
+    vec3 s = gInv * d;
+    return vec3(s.yz / s.x * 0.5 + 0.5, s.x);
 }
 
 vec3 snapNormal(vec3 n) {
@@ -70,12 +92,8 @@ void main() {
     float iShadow = d8.g * 2.0;
     float iAO = d8.b * 2.0;
 
-    gFwd = vec3(-sin(yaw) * cos(pitch), -sin(pitch), cos(yaw) * cos(pitch));
-    gRight = vec3(-cos(yaw), 0.0, -sin(yaw));
-    gUp = vec3(-sin(yaw) * sin(pitch), cos(pitch), cos(yaw) * sin(pitch));
-    gTh = tan(fov * 0.5);
-    gAspect = OutSize.x / OutSize.y;
     gFar = far;
+    loadView();
 
     vec2 uv = texCoord;
     float depth = texture(DepthSampler, uv).r;
@@ -89,7 +107,7 @@ void main() {
     }
 
     vec2 px = vec2(1.0 / OutSize.x, 0.0), py = vec2(0.0, 1.0 / OutSize.y);
-    vec3 P = ray * lin;
+    vec3 P = gE + ray * lin;
     vec3 pr = posAt(uv + px), pl = posAt(uv - px), pu = posAt(uv + py), pd = posAt(uv - py);
     vec3 dx = abs(dot(pr - P, gFwd)) < abs(dot(P - pl, gFwd)) ? pr - P : P - pl;
     vec3 dy = abs(dot(pu - P, gFwd)) < abs(dot(P - pd, gFwd)) ? pu - P : P - pd;

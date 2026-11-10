@@ -21,7 +21,10 @@ public final class FullbrightBlocker {
 	private static final Identifier LIGHTMAP = Identifier.ofVanilla("shaders/core/lightmap.fsh");
 	private static String lastSeen = "";
 
+	private static boolean gammaWarned;
+
 	public static void tick(MinecraftClient client) {
+		blockGammaFullbright(client);
 		ResourcePackManager manager = client.getResourcePackManager();
 		if (manager == null || client.getOverlay() != null) return; // not while resources are reloading
 		StringBuilder key = new StringBuilder();
@@ -48,6 +51,21 @@ public final class FullbrightBlocker {
 		SystemToast.show(client.getToastManager(), SystemToast.Type.PERIODIC_NOTIFICATION,
 				Text.literal("Fullbright pack disabled"),
 				Text.literal(names + " was turned off. Press F6 to enable Lumen's built-in fullbright."));
+	}
+
+	/** Client fullbright features (Dawn/Feather, gamma mods) push brightness past the vanilla max. Put it back. */
+	private static void blockGammaFullbright(MinecraftClient client) {
+		try {
+			double g = client.options.getGamma().getValue();
+			if (g <= 1.0001) return;
+			client.options.getGamma().setValue(1.0);
+			if (!gammaWarned) {
+				gammaWarned = true;
+				SystemToast.show(client.getToastManager(), SystemToast.Type.PERIODIC_NOTIFICATION,
+						Text.literal("Fullbright disabled"),
+						Text.literal("Your client's fullbright was turned off. Press F6 to enable Lumen's built-in fullbright."));
+			}
+		} catch (Throwable ignored) {}
 	}
 
 	private static boolean isFullbright(ResourcePackProfile p) {

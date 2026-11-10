@@ -165,7 +165,7 @@
         {
           "sampler_name": "Data",
           "location": "lumen:data",
-          "width": 12,
+          "width": 18,
           "height": 1,
           "bilinear": false
         },
@@ -195,7 +195,7 @@
         {
           "sampler_name": "Data",
           "location": "lumen:data",
-          "width": 12,
+          "width": 18,
           "height": 1,
           "bilinear": false
         }
@@ -230,7 +230,7 @@
         {
           "sampler_name": "Data",
           "location": "lumen:data",
-          "width": 12,
+          "width": 18,
           "height": 1,
           "bilinear": false
         }
@@ -270,7 +270,7 @@
         {
           "sampler_name": "Data",
           "location": "lumen:data",
-          "width": 12,
+          "width": 18,
           "height": 1,
           "bilinear": false
         },

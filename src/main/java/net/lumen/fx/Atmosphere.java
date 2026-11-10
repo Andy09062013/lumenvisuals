@@ -23,7 +23,7 @@ import net.minecraft.world.biome.BiomeKeys;
 public final class Atmosphere {
 	public static final Identifier TEXTURE = Identifier.of("lumen", "textures/effect/data.png");
 	public static final Identifier TEXTURE_SHORT = Identifier.of("lumen", "data");
-	private static final int W = 12;
+	private static final int W = 18;
 
 	private static NativeImageBackedTexture texture;
 	private static NativeImage image;
@@ -93,6 +93,16 @@ public final class Atmosphere {
 		// pixel 11: Distant Horizons installed, exact fov (16 bit)
 		int f16 = clamp16(fov / 180f);
 		set(11, net.lumen.Compat.DISTANT_HORIZONS ? 255 : 0, f16 >> 8, f16 & 255, 0);
+		// pixels 12-17: exact camera (eye offset, center ray, right and up steps), 16 bit each
+		net.lumen.ViewCapture.update(client);
+		var e = net.lumen.ViewCapture.EYE; var c = net.lumen.ViewCapture.CENTER;
+		var r = net.lumen.ViewCapture.RIGHT; var u = net.lumen.ViewCapture.UP;
+		put16(12, sn(e.x, 2f), sn(e.y, 2f));
+		put16(13, sn(e.z, 2f), sn(c.x, 8f));
+		put16(14, sn(c.y, 8f), sn(c.z, 8f));
+		put16(15, sn(r.x, 8f), sn(r.y, 8f));
+		put16(16, sn(r.z, 8f), sn(u.x, 8f));
+		put16(17, sn(u.y, 8f), sn(u.z, 8f));
 		texture.upload();
 	}
 
@@ -115,6 +125,9 @@ public final class Atmosphere {
 	private static float lerp(float a, float b, float k) { return a + (b - a) * k; }
 
 	private static int b8(float v) { return Math.max(0, Math.min(255, Math.round(v * 255f))); }
+
+	/** signed value in [-range, range] -> 0..1 */
+	private static float sn(float v, float range) { return Math.max(0f, Math.min(1f, v / range * 0.5f + 0.5f)); }
 
 	private static int clamp16(float v) { return Math.max(0, Math.min(65535, Math.round(v * 65535f))); }
 
