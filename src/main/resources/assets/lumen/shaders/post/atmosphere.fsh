@@ -84,6 +84,7 @@ void main() {
     float camSky = d7.r;
     float cave = d7.b;
     float daylight = d7.a;
+    bool dh = dataAt(11).r > 0.5;
     float iSunRays = d8.r * 2.0;
     float iShadow = d8.g * 2.0;
     float iAO = d8.b * 2.0;
@@ -114,15 +115,24 @@ void main() {
     vec3 c = texture(InSampler, uv).rgb;
     float depth = texture(DepthSampler, uv).r;
     bool isSky = depth >= 0.99999;
+    // Distant Horizons draws far terrain where our depth buffer says "sky": anything at or below the horizon is land
+    bool dhLand = false;
     float lin = isSky ? far * 2.0 : linearDepth(depth, far);
     float dist = lin * length(ray);
     float pixelY = camY + ray.y * lin;
+    if (dh && isSky && dir.y < 0.06) {
+        isSky = false;
+        dhLand = true;
+        lin = far * 1.6;
+        dist = lin * length(ray);
+        pixelY = camY + ray.y * lin;
+    }
 
     // ---- replace vanilla's square sun with a round disc (done first, so all later colouring matches) ----
     vec3 sunDir0 = normalize(vec3((morning * 2.0 - 1.0) * sqrt(max(1.0 - sunElev * sunElev, 0.0)), sunElev, 0.0));
     // clouds are see-through, so the square shows through them too: treat far, high-up pixels like sky here
     bool cloudPx = !isSky && lin > 48.0 && pixelY > 130.0;
-    if ((isSky || cloudPx) && iSunRays > 0.001 && overworld > 0.5 && under < 0.5) {
+    if ((isSky || cloudPx) && !dhLand && iSunRays > 0.001 && overworld > 0.5 && under < 0.5) {
         vec3 e1 = vec3(0.0, 0.0, 1.0);
         vec3 e2 = normalize(cross(sunDir0, e1));
         float dd = dot(dir, sunDir0);
@@ -222,6 +232,7 @@ void main() {
                 p += delta;
                 vec2 q = clamp(p, vec2(0.0), vec2(1.0));
                 float open = texture(DepthSampler, q).r >= 0.99999 ? 1.0 : 0.0;
+                if (dh && open > 0.5 && normalize(viewRay(q)).y < 0.06) open = 0.0;
                 float nearSun = exp(-length((q - sunUV) * vec2(aspect, 1.0)) * 4.5);
                 shafts += open * nearSun * decay;
                 decay *= 0.94;
@@ -266,6 +277,7 @@ void main() {
         vec3 dayHaze = vec3(0.78, 0.84, 0.92);
         vec3 hazeCol = mix(dayHaze, tint, dawnDusk) * (0.08 + 0.92 * daylight);
         float hazeF = 1.0 - exp(-dist / (far * 0.5));
+        if (dhLand) hazeF = 0.55; // far LOD terrain fades into the sky like real distance
         float amt = iHaze * (0.12 + 0.88 * dawnDusk) * overworld * (1.0 - under) * (1.0 - cave);
         c = mix(c, hazeCol, clamp(hazeF * amt * 0.4, 0.0, 0.5));
     }

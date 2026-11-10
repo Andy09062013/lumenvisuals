@@ -23,7 +23,7 @@ import net.minecraft.world.biome.BiomeKeys;
 public final class Atmosphere {
 	public static final Identifier TEXTURE = Identifier.of("lumen", "textures/effect/data.png");
 	public static final Identifier TEXTURE_SHORT = Identifier.of("lumen", "data");
-	private static final int W = 11;
+	private static final int W = 12;
 
 	private static NativeImageBackedTexture texture;
 	private static NativeImage image;
@@ -85,6 +85,8 @@ public final class Atmosphere {
 		put16(9, net.lumen.ShadowMap.offsetU, net.lumen.ShadowMap.offsetV);
 		put16(10, net.lumen.ShadowMap.lightX * 0.5f + 0.5f, net.lumen.ShadowMap.lightY * 0.5f + 0.5f);
 
+		// pixel 11: Distant Horizons installed
+		put(11, net.lumen.Compat.DISTANT_HORIZONS ? 1f : 0f, 0f, 0f, 0f);
 		texture.upload();
 	}
 

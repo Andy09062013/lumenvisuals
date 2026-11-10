@@ -6,6 +6,8 @@ import net.lumen.config.Effect;
 /** Which effects can actually run with the renderer mods that are installed. */
 public final class Compat {
 	public static final boolean SODIUM = FabricLoader.getInstance().isModLoaded("sodium");
+	/** Distant Horizons draws far-away terrain where the normal depth buffer says "sky". */
+	public static final boolean DISTANT_HORIZONS = FabricLoader.getInstance().isModLoaded("distanthorizons");
 
 	/** Null if the effect works, otherwise a short reason shown in the settings screen. */
 	public static String unavailable(Effect e) {

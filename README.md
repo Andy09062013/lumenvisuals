@@ -4,6 +4,8 @@ Shader-like visuals for Minecraft 1.21.11 (Fabric). Purely cosmetic.
 
 **Download:** [lumen.jar (latest)](https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar) - put it in your mods folder with [Fabric API](https://modrinth.com/mod/fabric-api).
 
+**Best with [Distant Horizons](https://modrinth.com/mod/distanthorizons) (optional, recommended).**
+
 ```
 LUMEN v0.6 - visual mod for Minecraft 1.21.11 (Fabric)
 
@@ -71,6 +73,8 @@ them to install it (a server can't install mods for them). Edit config/lumen-ser
 Players with Lumen can still join vanilla servers normally.
 
 COMPATIBILITY
+- Distant Horizons (recommended): far LOD terrain gets distance haze and blends into the sky; sun glow and light
+  shafts no longer shine through distant mountains.
 - These are screen-space tricks (like some lighter shaderpacks): shadows only come from things you can see on screen,
   and true reflections/volumetric clouds aren't possible without a full shader renderer like Iris.
 - Iris: if a shaderpack is running, Lumen's screen effects turn off (the shaderpack does its own). Particles keep working.
