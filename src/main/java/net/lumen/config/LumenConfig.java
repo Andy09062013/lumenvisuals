@@ -29,7 +29,12 @@ public final class LumenConfig {
 	static { applyPreset(Preset.HIGH); }
 
 	public static Setting get(Effect e) {
-		return SETTINGS.computeIfAbsent(e, k -> new Setting());
+		return SETTINGS.computeIfAbsent(e, k -> {
+			// effects that are new since the config was saved start the way the default preset has them
+			Setting n = new Setting();
+			n.enabled = Preset.HIGH.enables(k);
+			return n;
+		});
 	}
 
 	public static boolean on(Effect e) {
@@ -53,7 +58,11 @@ public final class LumenConfig {
 		}
 	}
 
+	/** Bump when a saved setting needs fixing on load. */
+	private static final int VERSION = 2;
+
 	private static final class Saved {
+		int version;
 		String preset;
 		Map<String, Setting> effects = new LinkedHashMap<>();
 	}
@@ -77,6 +86,11 @@ public final class LumenConfig {
 						} catch (Exception ignored) {}
 					}
 				}
+				if (s.version < 2) {
+					// older versions could save cozy fullbright as on without you turning it on
+					get(Effect.COZY_BRIGHT).enabled = false;
+					save();
+				}
 			}
 		} catch (Exception e) {
 			System.err.println("[Lumen] couldn't read config: " + e);
@@ -86,6 +100,7 @@ public final class LumenConfig {
 	public static void save() {
 		try {
 			Saved s = new Saved();
+			s.version = VERSION;
 			s.preset = preset.name();
 			for (Effect e : Effect.values()) s.effects.put(e.name(), get(e));
 			Files.createDirectories(FILE.getParent());
