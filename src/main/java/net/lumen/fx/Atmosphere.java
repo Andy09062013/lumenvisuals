@@ -61,6 +61,10 @@ public final class Atmosphere {
 		float yaw = cam.getYaw() % 360f;
 		if (yaw < 0) yaw += 360f;
 		float fov = client.options.getFov().getValue();
+		try {
+			// the real drawing FOV: sprinting/speed/spyglass change it, and a wrong FOV puts shadows in the wrong place
+			fov = ((net.lumen.mixin.GameRendererAccessor) client.gameRenderer).lumen$getFov(cam, client.getRenderTickCounter().getTickProgress(true), true);
+		} catch (Throwable ignored) {}
 		float far = client.options.getClampedViewDistance() * 16f * 4f;
 
 		// pixel 0: sun height, morning, rain, thunder
@@ -86,7 +90,9 @@ public final class Atmosphere {
 		put16(10, net.lumen.ShadowMap.lightX * 0.5f + 0.5f, net.lumen.ShadowMap.lightY * 0.5f + 0.5f);
 
 		// pixel 11: Distant Horizons installed
-		put(11, net.lumen.Compat.DISTANT_HORIZONS ? 1f : 0f, 0f, 0f, 0f);
+		// pixel 11: Distant Horizons installed, exact fov (16 bit)
+		int f16 = clamp16(fov / 180f);
+		set(11, net.lumen.Compat.DISTANT_HORIZONS ? 255 : 0, f16 >> 8, f16 & 255, 0);
 		texture.upload();
 	}
 

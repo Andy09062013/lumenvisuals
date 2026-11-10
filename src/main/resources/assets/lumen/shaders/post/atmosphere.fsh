@@ -71,7 +71,7 @@ void main() {
     float pitch = radians(u16(d1.rg) * 180.0 - 90.0);
     float yaw = radians(u16(d1.ba) * 360.0);
     float camY = u16(d2.rg) * 512.0 - 128.0;
-    float fov = radians(max(d2.b * 180.0, 30.0));
+    float fov = radians(clamp(u16(dataAt(11).gb) * 180.0, 10.0, 170.0));
     float far = max(d2.a * 4096.0, 64.0);
     float under = d3.r;
     float heat = d3.g;
