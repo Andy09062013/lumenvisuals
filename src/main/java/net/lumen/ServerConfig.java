@@ -11,11 +11,12 @@ import java.nio.file.Path;
 
 /** Saved to config/lumen-server.json on the server. */
 public final class ServerConfig {
-	public static final String DEFAULT_URL = "https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar";
+	public static final String DEFAULT_URL = "https://andy09062013.github.io/lumenvisuals/";
 	/** Old default links that get upgraded automatically. */
 	private static final String[] OLD_URLS = {
 			"https://modrinth.com/mod/lumen",
-			"https://github.com/Andy09062013/lumenvisuals/releases/latest/download/lumen.jar"
+			"https://github.com/Andy09062013/lumenvisuals/releases/latest/download/lumen.jar",
+			"https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar"
 	};
 
 	public boolean requireClientMod = true;

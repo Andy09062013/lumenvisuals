@@ -41,7 +41,7 @@ public class Lumen implements ModInitializer {
 			handler.disconnect(Text.literal("")
 					.append(Text.literal("Lumen required\n\n").formatted(Formatting.GOLD, Formatting.BOLD))
 					.append(Text.literal(serverConfig.kickMessage + "\n\n").formatted(Formatting.WHITE))
-					.append(Text.literal("Download it here:\n").formatted(Formatting.GRAY))
+					.append(Text.literal("Get it here (download + 3 quick steps):\n").formatted(Formatting.GRAY))
 					.append(link(serverConfig.downloadUrl))
 					.append(Text.literal("\n\nPut it in your mods folder with Fabric API, then rejoin.").formatted(Formatting.GRAY)));
 		});

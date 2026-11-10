@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Lumen</title>
+<meta name="description" content="Download Lumen, the shader-like visual mod for Minecraft 1.21.11 (Fabric), and get back into the server.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Silkscreen&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #160f1f;
+    --card: #221829;
+    --line: #3a2a40;
+    --text: #f6efe6;
+    --muted: #c3b3bd;
+    --sun: #ffb347;
+    --sun2: #ff6f3c;
+    --ok: #7fd18b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(1200px 500px at 50% -120px, rgba(255,140,60,.35), transparent 70%),
+      linear-gradient(180deg, #2a1830 0%, var(--bg) 45%);
+    background-color: var(--bg);
+    min-height: 100vh;
+    line-height: 1.55;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+  .sun {
+    width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 18px;
+    background: radial-gradient(circle, #fff6e0 0 30%, var(--sun) 55%, rgba(255,111,60,0) 72%);
+    box-shadow: 0 0 80px 20px rgba(255,160,70,.35);
+  }
+  h1 { font-family: Silkscreen, monospace; font-weight: 400; font-size: 52px; text-align: center; margin: 0; letter-spacing: 2px; }
+  .tag { text-align: center; color: var(--muted); margin: 6px 0 30px; }
+  .why {
+    background: rgba(255,179,71,.1); border: 1px solid rgba(255,179,71,.35);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 24px; font-size: 15px;
+  }
+  .btn {
+    display: block; text-align: center; text-decoration: none; color: #2a1305;
+    background: linear-gradient(180deg, var(--sun), var(--sun2));
+    font-weight: 800; font-size: 20px; padding: 18px; border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(255,111,60,.35), inset 0 -4px 0 rgba(0,0,0,.18);
+  }
+  .btn:hover { filter: brightness(1.06); }
+  .small { text-align: center; font-size: 13px; color: var(--muted); margin: 10px 0 34px; }
+  h2 { font-size: 18px; margin: 0 0 14px; }
+  ol { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  li {
+    counter-increment: s; position: relative; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 14px 58px; margin-bottom: 10px;
+  }
+  li::before {
+    content: counter(s); position: absolute; left: 14px; top: 13px; width: 30px; height: 30px; border-radius: 8px;
+    background: var(--line); color: var(--sun); font-weight: 800; display: grid; place-items: center;
+  }
+  li b { display: block; margin-bottom: 2px; }
+  li span { color: var(--muted); font-size: 15px; }
+  a.inline { color: var(--sun); }
+  code { background: #120c18; border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; font-size: 14px; }
+  .done { text-align: center; margin-top: 26px; color: var(--ok); font-weight: 600; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="sun" aria-hidden="true"></div>
+  <h1>LUMEN</h1>
+  <p class="tag">Shader-like visuals for Minecraft 1.21.11 · Fabric</p>
+
+  <div class="why">This server uses <b>Lumen</b> for its look: sunsets, sun shadows, waterfall mist and more. It's purely visual and doesn't change gameplay. Grab it below, then rejoin.</div>
+
+  <a class="btn" href="https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar" download>Download Lumen</a>
+  <p class="small">Your browser might warn about a <code>.jar</code> file. That's normal for mods: choose <b>Keep</b>.</p>
+
+  <h2>Install in 3 steps</h2>
+  <ol>
+    <li><b>Have Fabric for 1.21.11</b><span>No Fabric yet? Get the <a class="inline" href="https://fabricmc.net/use/installer/">Fabric installer</a> and install it for 1.21.11. Using Prism, Modrinth App or CurseForge? Just make a Fabric 1.21.11 instance.</span></li>
+    <li><b>Get Fabric API</b><span>Download <a class="inline" href="https://modrinth.com/mod/fabric-api/versions?g=1.21.11">Fabric API for 1.21.11</a>. Lumen needs it.</span></li>
+    <li><b>Drop both jars into your mods folder</b><span>Put <code>lumen.jar</code> and Fabric API in <code>.minecraft/mods</code> (Windows: press Win+R, type <code>%appdata%\.minecraft\mods</code>). Then start Minecraft with the Fabric profile.</span></li>
+  </ol>
+
+  <p class="done">That's it. Rejoin the server ✓</p>
+  <footer>In game, type <code>/lumen</code> to change settings · <a class="inline" href="https://github.com/Andy09062013/lumenvisuals">Source</a></footer>
+</main>
+</body>
+</html>
