@@ -2,6 +2,8 @@ package net.lumen.config;
 
 /** Every effect Lumen has. Each one can be turned on/off and scaled in /lumen. */
 public enum Effect {
+	// Comfort
+	COZY_BRIGHT("Cozy fullbright (warm light everywhere)", Kind.OTHER),
 	// Water
 	WATER_SPLASH("Water splashes", Kind.PARTICLES),
 	WATER_RIPPLES("Water ripples", Kind.PARTICLES),
@@ -22,6 +24,7 @@ public enum Effect {
 	CAVE_DUST("Cave dust", Kind.PARTICLES),
 	HEAT_DISTORTION("Heat distortion (optional)", Kind.SCREEN),
 	SNOW_GUSTS("Snow gusts", Kind.PARTICLES),
+	FIRE_SPARKS("Fire sparks & crackle", Kind.PARTICLES),
 	// Weather
 	RAIN_SPLASH("Rain splashes", Kind.PARTICLES),
 	TREE_DRIPS("Tree drips in rain", Kind.PARTICLES),

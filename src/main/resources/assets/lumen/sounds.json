@@ -5,5 +5,12 @@
     "sounds": [
       { "name": "lumen:breeze", "stream": false }
     ]
+  },
+  "fire_crackle": {
+    "category": "blocks",
+    "subtitle": "Fire crackles",
+    "sounds": [
+      { "name": "lumen:fire_crackle", "stream": false }
+    ]
   }
 }

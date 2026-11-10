@@ -5,11 +5,11 @@ Shader-like visuals for Minecraft 1.21.11 (Fabric). Purely cosmetic.
 **Download:** [lumen.jar (latest)](https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar) - put it in your mods folder with [Fabric API](https://modrinth.com/mod/fabric-api).
 
 ```
-LUMEN v0.5 - visual mod for Minecraft 1.21.11 (Fabric)
+LUMEN v0.6 - visual mod for Minecraft 1.21.11 (Fabric)
 
 BUILD: double click BUILD.bat. The jar ends up in the out folder.
 INSTALL: put the jar + Fabric API in your mods folder (client). Optionally on a server too.
-SETTINGS: type /lumen in chat. Presets Low / Medium / High / Ultra, plus every effect on/off with a strength slider.
+SETTINGS: press F6 (or type /lumen in chat). Presets Low / Medium / High / Ultra, plus every effect on/off with a strength slider.
 
 Everything is cosmetic. No gameplay, physics, hitboxes, light levels or world gen are changed.
 
@@ -48,6 +48,9 @@ UNDERWATER
 - Drifting specks, light rays when you look up, deeper color with distance (visibility unchanged)
 
 LIGHT & LOOK (shaderpack style)
+- Cozy fullbright (off by default, first page of settings): dark places get warm torch-like light instead of flat brightness
+- Fullbright resource packs (like Vanilla Tweaks Fullbright) are turned off automatically
+- Fire and campfires sometimes burst sparks with a crackle sound
 - Sun & moon lighting: sunlit faces get warm light, faces away from the sun get cool shade
 - Shadows from anything on screen (trees, buildings, mobs) cast in the sun's direction
 - Ambient occlusion: corners and crevices darken softly

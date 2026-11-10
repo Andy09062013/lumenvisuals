@@ -17,7 +17,7 @@ public class WorldRendererMixin {
 	@Inject(method = "getLightmapCoordinates(Lnet/minecraft/client/render/WorldRenderer$BrightnessGetter;Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)I",
 			at = @At("RETURN"), cancellable = true, require = 0)
 	private static void lumen$dynamicLight(WorldRenderer.BrightnessGetter getter, BlockRenderView world, BlockState state, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-		int dyn = DynamicLights.lightAt(pos);
+		int dyn = Math.max(DynamicLights.lightAt(pos), net.lumen.CozyLight.level());
 		if (dyn <= 0) return;
 		int packed = cir.getReturnValueI();
 		int block = LightmapTextureManager.getBlockLightCoordinates(packed);

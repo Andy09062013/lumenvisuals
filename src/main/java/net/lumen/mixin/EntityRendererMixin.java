@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityRendererMixin {
 	@Inject(method = "getBlockLight", at = @At("RETURN"), cancellable = true, require = 0)
 	private void lumen$dynamicLight(Entity entity, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-		int dyn = DynamicLights.lightAt(pos);
+		int dyn = Math.max(DynamicLights.lightAt(pos), net.lumen.CozyLight.level());
 		if (dyn > cir.getReturnValueI()) cir.setReturnValue(dyn);
 	}
 }

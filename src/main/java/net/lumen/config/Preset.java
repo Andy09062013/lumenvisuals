@@ -21,6 +21,7 @@ public enum Preset {
 
 	/** Which effects are on by default for this preset. */
 	public boolean enables(Effect e) {
+		if (e == Effect.COZY_BRIGHT) return false; // only on when you turn it on
 		return switch (this) {
 			case LOW -> switch (e) {
 				case HEAT_DISTORTION, STORM_RAIN, UNDERWATER_RAYS, GROUND_MIST, POLLEN, CAVE_DUST, BLOOM, BOAT_WAKE, SUN_RAYS, SUN_SHADOWS, AMBIENT_OCCLUSION -> false;
