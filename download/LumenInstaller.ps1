@@ -1,8 +1,3 @@
-@echo off
-title Lumen Installer
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$s=[IO.File]::ReadAllText('%~f0'); $i=$s.IndexOf('#PS'+'START'); Invoke-Expression $s.Substring($i)"
-exit /b
-#PSSTART
 # Lumen installer: pick a launcher + profile, it puts Lumen (+ Fabric API, optional Distant Horizons) in that profile's mods folder.
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
