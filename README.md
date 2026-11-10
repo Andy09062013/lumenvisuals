@@ -84,3 +84,6 @@ COMPATIBILITY
   changes its shaders may need a Lumen update.
 - Particle amount scales with your Particles video setting and the preset.
 ```
+
+## Installer
+`download/LumenInstaller.exe` installs Lumen into the Minecraft Launcher, Prism/MultiMC, Modrinth App, CurseForge or Dawn (formerly Feather). It bundles Lumen, Fabric API (Apache-2.0, https://github.com/FabricMC/fabric) and Distant Horizons (LGPL-3.0, https://gitlab.com/distant-horizons-team/distant-horizons) so it never downloads anything. Source: `installer-go/`.

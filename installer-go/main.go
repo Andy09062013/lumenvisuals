@@ -4,11 +4,10 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -17,14 +16,14 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 )
 
-const (
-	mc       = "1.21.11"
-	lumenURL = "https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar"
-	ua       = "Andy09062013/LumenInstaller/1.2"
-)
+const mc = "1.21.11"
+
+// Everything is bundled inside the exe, so it never downloads anything.
+//
+//go:embed bundled/*.jar
+var bundled embed.FS
 
 type profile struct {
 	Name   string
@@ -33,6 +32,47 @@ type profile struct {
 }
 
 var in = bufio.NewReader(os.Stdin)
+
+// Dawn (formerly Feather): look for "user-mods/<version>" folders and any "mods" folders under .dawn
+func dawn() []profile {
+	var out []profile
+	seen := map[string]bool{}
+	for _, root := range []string{filepath.Join(appdata(), ".dawn"), filepath.Join(appdata(), ".feather")} {
+		if !exists(root) {
+			continue
+		}
+		base := filepath.Base(root)
+		filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+			if err != nil || !d.IsDir() {
+				return nil
+			}
+			rel, _ := filepath.Rel(root, path)
+			if strings.Count(rel, string(filepath.Separator)) > 5 {
+				return filepath.SkipDir
+			}
+			low := strings.ToLower(d.Name())
+			if low == "assets" || low == "libraries" || low == "versions" || low == "runtime" || low == "cache" || low == "logs" {
+				return filepath.SkipDir
+			}
+			parent := strings.ToLower(filepath.Base(filepath.Dir(path)))
+			var mods string
+			if parent == "user-mods" {
+				mods = path
+			} else if low == "mods" {
+				mods = path
+			}
+			if mods != "" && !seen[mods] {
+				seen[mods] = true
+				name := base + "\\" + rel
+				lp := strings.ToLower(rel)
+				fabric := strings.Contains(lp, mc) && (strings.Contains(lp, "fabric") || parent == "user-mods")
+				out = append(out, profile{name, mods, fabric})
+			}
+			return nil
+		})
+	}
+	return out
+}
 
 func appdata() string {
 	if a := os.Getenv("APPDATA"); a != "" {
@@ -177,71 +217,23 @@ func curseforge() []profile {
 	return out
 }
 
-var client = &http.Client{Timeout: 3 * time.Minute}
-
-func get(u string) (*http.Response, error) {
-	req, _ := http.NewRequest("GET", u, nil)
-	req.Header.Set("User-Agent", ua)
-	r, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if r.StatusCode != 200 {
-		r.Body.Close()
-		return nil, fmt.Errorf("HTTP %d from %s", r.StatusCode, req.URL.Host)
-	}
-	return r, nil
-}
-
-func download(u, to string) error {
-	r, err := get(u)
-	if err != nil {
-		return err
-	}
-	defer r.Body.Close()
-	tmp := to + ".part"
-	f, err := os.Create(tmp)
-	if err != nil {
-		return err
-	}
-	if _, err = io.Copy(f, r.Body); err != nil {
-		f.Close()
-		os.Remove(tmp)
-		return err
-	}
-	f.Close()
-	os.Remove(to)
-	return os.Rename(tmp, to)
-}
-
-func modrinthFile(project string) (string, string, error) {
-	q := "game_versions=" + url.QueryEscape(`["`+mc+`"]`) + "&loaders=" + url.QueryEscape(`["fabric"]`)
-	r, err := get("https://api.modrinth.com/v2/project/" + project + "/version?" + q)
-	if err != nil {
-		return "", "", err
-	}
-	defer r.Body.Close()
-	var vs []struct {
-		Files []struct {
-			URL      string `json:"url"`
-			Filename string `json:"filename"`
-			Primary  bool   `json:"primary"`
-		} `json:"files"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&vs); err != nil {
-		return "", "", err
-	}
-	if len(vs) == 0 || len(vs[0].Files) == 0 {
-		return "", "", fmt.Errorf("no %s build for %s yet", project, mc)
-	}
-	f := vs[0].Files[0]
-	for _, x := range vs[0].Files {
-		if x.Primary {
-			f = x
-			break
+// copy a bundled jar whose name starts with prefix into the mods folder; returns the file name
+func install(prefix, mods, as string) (string, error) {
+	es, _ := fs.ReadDir(bundled, "bundled")
+	for _, e := range es {
+		if strings.HasPrefix(strings.ToLower(e.Name()), prefix) {
+			b, err := bundled.ReadFile("bundled/" + e.Name())
+			if err != nil {
+				return "", err
+			}
+			name := e.Name()
+			if as != "" {
+				name = as
+			}
+			return name, os.WriteFile(filepath.Join(mods, name), b, 0o644)
 		}
 	}
-	return f.URL, f.Filename, nil
+	return "", fmt.Errorf("%s is missing from the installer", prefix)
 }
 
 func has(mods string, re *regexp.Regexp) bool {
@@ -290,8 +282,9 @@ func main() {
 	fmt.Println("  2) Prism Launcher / MultiMC")
 	fmt.Println("  3) Modrinth App")
 	fmt.Println("  4) CurseForge")
+	fmt.Println("  5) Dawn (formerly Feather)")
 	var found []profile
-	switch pick("Type 1-4 and press Enter: ", 4) {
+	switch pick("Type 1-5 and press Enter: ", 5) {
 	case 1:
 		found = official()
 	case 2:
@@ -300,6 +293,8 @@ func main() {
 		found = modrinth()
 	case 4:
 		found = curseforge()
+	case 5:
+		found = dawn()
 	}
 	if len(found) == 0 {
 		fmt.Println("\nNo profiles found for that launcher.")
@@ -342,16 +337,14 @@ func main() {
 			os.Remove(filepath.Join(p.Mods, e.Name()))
 		}
 	}
-	fmt.Println("Downloading Lumen...")
-	if err := download(lumenURL, filepath.Join(p.Mods, "lumen.jar")); err != nil {
+	fmt.Println("Installing Lumen...")
+	if _, err := install("lumen", p.Mods, "lumen.jar"); err != nil {
 		fmt.Println("  Failed:", err)
 		finish(1)
 	}
 	if !has(p.Mods, regexp.MustCompile(`^fabric-api.*\.jar$`)) {
-		fmt.Println("Downloading Fabric API...")
-		if u, n, err := modrinthFile("fabric-api"); err != nil {
-			fmt.Println("  Failed:", err, "(get it from modrinth.com/mod/fabric-api)")
-		} else if err := download(u, filepath.Join(p.Mods, n)); err != nil {
+		fmt.Println("Installing Fabric API...")
+		if _, err := install("fabric-api", p.Mods, ""); err != nil {
 			fmt.Println("  Failed:", err)
 		}
 	} else {
@@ -359,10 +352,8 @@ func main() {
 	}
 	if wantDH {
 		if !has(p.Mods, regexp.MustCompile(`distant.?horizons.*\.jar$`)) {
-			fmt.Println("Downloading Distant Horizons...")
-			if u, n, err := modrinthFile("distanthorizons"); err != nil {
-				fmt.Println("  Failed:", err)
-			} else if err := download(u, filepath.Join(p.Mods, n)); err != nil {
+			fmt.Println("Installing Distant Horizons...")
+			if _, err := install("distanthorizons", p.Mods, ""); err != nil {
 				fmt.Println("  Failed:", err)
 			}
 		} else {
