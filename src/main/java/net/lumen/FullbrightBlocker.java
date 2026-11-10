@@ -46,8 +46,8 @@ public final class FullbrightBlocker {
 		client.options.refreshResourcePacks(manager);
 		client.reloadResources();
 		SystemToast.show(client.getToastManager(), SystemToast.Type.PERIODIC_NOTIFICATION,
-				Text.literal("Lumen turned off a fullbright pack"),
-				Text.literal(names + " - use Cozy fullbright in Lumen settings (F6) instead"));
+				Text.literal("Fullbright pack disabled"),
+				Text.literal(names + " was turned off. Press F6 to enable Lumen's built-in fullbright."));
 	}
 
 	private static boolean isFullbright(ResourcePackProfile p) {
