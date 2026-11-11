@@ -51,7 +51,7 @@ UNDERWATER
 
 LIGHT & LOOK (shaderpack style)
 - Cozy fullbright (off by default, first page of settings): dark places get warm torch-like light instead of flat brightness
-- Fullbright resource packs (like Vanilla Tweaks Fullbright) are turned off automatically
+- External fullbright mods, gamma settings and fullbright resource packs are left alone; Cozy fullbright remains optional
 - Fire and campfires sometimes burst sparks with a crackle sound
 - Sun & moon lighting: sunlit faces get warm light, faces away from the sun get cool shade
 - Shadows from anything on screen (trees, buildings, mobs) cast in the sun's direction
