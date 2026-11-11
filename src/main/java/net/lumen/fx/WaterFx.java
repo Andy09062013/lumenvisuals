@@ -28,9 +28,14 @@ public final class WaterFx {
 
 	private static final Map<Integer, Track> TRACKS = new HashMap<>();
 	private static int tick;
+	private static ClientWorld lastWorld;
 	private static final double RANGE = 40;
 
 	public static void tick(MinecraftClient client, ClientWorld world) {
+		if (world != lastWorld) {
+			TRACKS.clear();
+			lastWorld = world;
+		}
 		tick++;
 		boolean any = Fx.rate(Effect.WATER_SPLASH) > 0 || Fx.rate(Effect.WATER_RIPPLES) > 0 || Fx.rate(Effect.SWIM_FOAM) > 0
 				|| Fx.rate(Effect.BOAT_WAKE) > 0 || Fx.rate(Effect.BUBBLES) > 0;
