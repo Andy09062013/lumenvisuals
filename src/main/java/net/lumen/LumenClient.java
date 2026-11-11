@@ -82,7 +82,6 @@ public class LumenClient implements ClientModInitializer {
 	}
 
 	private static void tick(MinecraftClient client) {
-		FullbrightBlocker.tick(client);
 		CozyLight.tick(client);
 		while (settingsKey != null && settingsKey.wasPressed()) {
 			if (client.currentScreen == null) openScreen = true;
