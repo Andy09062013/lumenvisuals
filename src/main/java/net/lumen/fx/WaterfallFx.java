@@ -32,8 +32,13 @@ public final class WaterfallFx {
 	private static final Map<BlockPos, Fall> FALLS = new HashMap<>();
 	private static final int MAX_FALLS = 40;
 	private static int tick;
+	private static ClientWorld lastWorld;
 
 	public static void tick(MinecraftClient client, ClientWorld world) {
+		if (world != lastWorld) {
+			FALLS.clear();
+			lastWorld = world;
+		}
 		tick++;
 		float mist = Fx.rate(Effect.WATERFALL_MIST);
 		float drips = Fx.rate(Effect.DRIPS);
