@@ -28,6 +28,7 @@ public final class DynamicLights {
 	private static volatile List<Source> sources = List.of();
 	private static final Map<UUID, Source> LAST = new HashMap<>();
 	private static final double RANGE = 64.0;
+	private static ClientWorld lastWorld;
 
 	/** Light level our held lights add at this block, 0 if none. Called from chunk building threads. */
 	public static int lightAt(BlockPos pos) {
@@ -60,6 +61,11 @@ public final class DynamicLights {
 
 	public static void tick(MinecraftClient client) {
 		ClientWorld world = client.world;
+		if (world != lastWorld) {
+			sources = List.of();
+			LAST.clear();
+			lastWorld = world;
+		}
 		if (world == null || client.player == null) {
 			if (!sources.isEmpty()) sources = List.of();
 			LAST.clear();
