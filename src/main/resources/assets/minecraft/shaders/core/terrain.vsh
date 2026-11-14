@@ -19,6 +19,7 @@ out float cylindricalVertexDistance;
 out vec4 vertexColor;
 out vec2 texCoord0;
 out vec3 lumenViewPos;
+out vec3 lumenWorldPos;
 
 vec4 minecraft_sample_lightmap(sampler2D lightMap, ivec2 uv) {
     return texture(lightMap, clamp((uv / 256.0) + 0.5 / 16.0, vec2(0.5 / 16.0), vec2(15.5 / 16.0)));
@@ -37,4 +38,5 @@ void main() {
     if (Color.a > 251.5 / 255.0 && Color.a < 253.5 / 255.0) vertexColor.a = 1.0;
     texCoord0 = UV0;
     lumenViewPos = pos;
+    lumenWorldPos = Position + vec3(ChunkPosition);
 }

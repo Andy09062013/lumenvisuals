@@ -10,6 +10,8 @@ out vec2 v_TexCoord;
 
 flat out uint v_Material;
 out vec3 v_LumenViewPos;
+out vec3 v_LumenWorldPos;
+out float v_LumenTime;
 
 #ifdef USE_FOG
 out vec2 v_FragDistance;
@@ -47,6 +49,8 @@ void main() {
     // Lumen: foliage sway (no-op unless the "swaying grass" pack is on). Region-local coords keep the waves still while you move.
     position += lumen_sway(_get_draw_translation(_draw_id) + _vert_position, _vert_color, gl_VertexID, float(u_CurrentTime % 3600000) * 0.001);
     v_LumenViewPos = position;
+    v_LumenWorldPos = _get_draw_translation(_draw_id) + _vert_position;
+    v_LumenTime = float(u_CurrentTime % 3600000) * 0.001;
 
 #ifdef USE_FOG
     v_FragDistance = getFragDistance(position);

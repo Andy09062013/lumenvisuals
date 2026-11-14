@@ -12,6 +12,7 @@ in float cylindricalVertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
 in vec3 lumenViewPos;
+in vec3 lumenWorldPos;
 
 out vec4 fragColor;
 
@@ -97,6 +98,7 @@ void main() {
 #endif
     // Lumen: water picks up sky/sunset color at grazing angles (no-op unless the "sky colors on water" pack is on)
     color.rgb = lumen_water(color, vertexColor, lumenViewPos);
+    color.rgb = lumen_waterflow(color.rgb, color, vertexColor, lumenViewPos, lumenWorldPos, GameTime * 1200.0, FogColor.rgb);
     color.a = lumen_water_alpha(color, vertexColor, lumenViewPos);
     fragColor = apply_fog(color, sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd, FogColor);
 }

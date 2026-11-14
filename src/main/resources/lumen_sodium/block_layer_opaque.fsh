@@ -11,6 +11,8 @@ in float fadeFactor;
 
 flat in uint v_Material;
 in vec3 v_LumenViewPos;
+in vec3 v_LumenWorldPos;
+in float v_LumenTime;
 
 uniform sampler2D u_BlockTex; // The block texture
 
@@ -97,6 +99,7 @@ void main() {
 
     // Lumen: sky colours on water + clearer water (no-op unless the "sky colors on water" pack is on)
     color.rgb = lumen_water(color, v_Color, v_LumenViewPos, u_FogColor);
+    color.rgb = lumen_waterflow(color.rgb, color, v_Color, v_LumenViewPos, v_LumenWorldPos, v_LumenTime, u_FogColor.rgb);
     color.a = lumen_water_alpha(color, v_Color, v_LumenViewPos);
 
     fragColor = _linearFog(color, v_FragDistance, u_FogColor, u_EnvironmentFog, u_RenderFog, fadeFactor);
