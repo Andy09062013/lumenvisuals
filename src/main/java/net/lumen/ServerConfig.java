@@ -19,7 +19,11 @@ public final class ServerConfig {
 			"https://github.com/Andy09062013/lumenvisuals/raw/main/download/lumen.jar"
 	};
 
-	public boolean requireClientMod = true;
+	/** false: anyone can join, players without Lumen just get a chat tip. true: players without Lumen are kicked. */
+	public boolean requireClientMod = false;
+	/** Tell players without Lumen where to get it when they join (only used when it's optional). */
+	public boolean suggestToPlayersWithout = true;
+	public int configVersion = 2;
 	public String downloadUrl = DEFAULT_URL;
 	public String kickMessage = "This server requires the Lumen visual mod (client side, Fabric 1.21.11).";
 
@@ -33,6 +37,12 @@ public final class ServerConfig {
 				try (Reader r = Files.newBufferedReader(file)) {
 					ServerConfig read = GSON.fromJson(r, ServerConfig.class);
 					if (read != null) cfg = read;
+					if (cfg.configVersion < 2) {
+						// Lumen is optional now: older configs that required it are switched over once
+						cfg.requireClientMod = false;
+						cfg.suggestToPlayersWithout = true;
+						cfg.configVersion = 2;
+					}
 					for (String o : OLD_URLS) if (o.equals(cfg.downloadUrl)) cfg.downloadUrl = DEFAULT_URL;
 				}
 			}

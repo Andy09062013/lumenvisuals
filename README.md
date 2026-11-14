@@ -65,11 +65,12 @@ Four built-in packs, all on by default:
   Lumen: swaying grass & foliage / sky colors on water / warm torchlight & blue moonlight / soft fog
 
 SERVER
-If Lumen is on a dedicated server, players without it get disconnected with a message telling
-them to install it (a server can't install mods for them). Edit config/lumen-server.json:
-  requireClientMod  true/false
-  downloadUrl       the link shown to players
-  kickMessage       the text shown to players
+Lumen is optional on servers: players without it can join, and get a short chat tip with the
+download link. Edit config/lumen-server.json:
+  requireClientMod         false (default) = optional, true = kick players who don't have it
+  suggestToPlayersWithout  show the chat tip to players without Lumen (default true)
+  downloadUrl              the link shown to players
+  kickMessage              the text shown when it's required
 Players with Lumen can still join vanilla servers normally.
 
 COMPATIBILITY
